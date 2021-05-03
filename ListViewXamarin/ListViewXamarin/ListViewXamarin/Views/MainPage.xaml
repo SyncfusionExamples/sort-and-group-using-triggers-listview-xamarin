@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ListViewXamarin"
+             xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             xmlns:data="clr-namespace:Syncfusion.DataSource;assembly=Syncfusion.DataSource.Portable"
+             x:Class="ListViewXamarin.MainPage" Padding="{OnPlatform iOS='0,40,0,0'}">
+    <ContentPage.BindingContext>
+        <local:ContactsViewModel x:Name="viewModel"/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <local:Behavior/>
+    </ContentPage.Behaviors>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Button x:Name="sortButton" Text="Change sort direction" HeightRequest="50"/>
+            <syncfusion:SfListView x:Name="listView" ItemSpacing="16,0,16,0" 
+                                   ItemSize="60"
+                                   ItemsSource="{Binding ContactsInfo}">
+                <syncfusion:SfListView.Triggers>
+                    <DataTrigger TargetType="syncfusion:SfListView" Binding="{Binding SortDirection}" Value="Ascending">
+                        <Setter Property="DataSource">
+                            <Setter.Value>
+                                <data:DataSource>
+                                    <data:DataSource.GroupDescriptors>
+                                        <data:GroupDescriptor PropertyName="ContactType"/>
+                                    </data:DataSource.GroupDescriptors>
+                                    <data:DataSource.SortDescriptors>
+                                        <data:SortDescriptor PropertyName="ContactName" Direction="Ascending"/>
+                                    </data:DataSource.SortDescriptors>
+                                </data:DataSource>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="GroupHeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <Grid BackgroundColor="Green" HeightRequest="50">
+                                        <Label Text="{Binding Key}" Padding="10,0,0,0" VerticalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="syncfusion:SfListView" Binding="{Binding SortDirection}" Value="Descending">
+                        <Setter Property="DataSource">
+                            <Setter.Value>
+                                <data:DataSource>
+                                    <data:DataSource.GroupDescriptors>
+                                        <data:GroupDescriptor PropertyName="ContactType"/>
+                                    </data:DataSource.GroupDescriptors>
+                                    <data:DataSource.SortDescriptors>
+                                        <data:SortDescriptor PropertyName="ContactName" Direction="Descending"/>
+                                    </data:DataSource.SortDescriptors>
+                                </data:DataSource>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="GroupHeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <Grid BackgroundColor="Red" HeightRequest="50">
+                                        <Label Text="{Binding Key}" Padding="10,0,0,0" VerticalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </syncfusion:SfListView.Triggers>
+                <syncfusion:SfListView.ItemTemplate >
+                    <DataTemplate>
+                        <Grid x:Name="grid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ContactImage}" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                            <Grid Grid.Column="1" RowSpacing="1" Padding="10,0,0,0" VerticalOptions="Center">
+                                <Label LineBreakMode="NoWrap" TextColor="#474747" Text="{Binding ContactName}"/>
+                                <Label Grid.Row="1" Grid.Column="0" TextColor="#474747" LineBreakMode="NoWrap" Text="{Binding ContactNumber}"/>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+            </syncfusion:SfListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
